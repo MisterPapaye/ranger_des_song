@@ -1,0 +1,80 @@
+🎵 RANGER DE SONG - FEDORA 43 BUILD CHECKLIST
+
+═══════════════════════════════════════════════════════════════
+
+✅ STEP 1: Install System Dependencies
+────────────────────────────────────
+
+Copy and paste this command:
+
+    sudo dnf install webkit2gtk4.1-devel libsoup3-devel glib2-devel openssl-devel
+
+
+✅ STEP 2: Navigate to Project
+──────────────────────────────
+
+    cd "/home/moi/Documents/projets divers/ranger_de_song"
+
+
+✅ STEP 3: Build the Project
+────────────────────────────
+
+Choose ONE:
+
+Option A (RECOMMENDED - Automatic):
+    chmod +x build-fedora43.sh
+    ./build-fedora43.sh
+
+Option B (Manual):
+    cd src-tauri && rm -rf target Cargo.lock && cd ..
+    rm -rf node_modules package-lock.json
+    npm install
+    cd src-tauri && cargo build && cd ..
+
+
+✅ STEP 4: Start Development
+────────────────────────────
+
+    npm run dev
+
+The app window will open automatically! ✨
+
+
+═══════════════════════════════════════════════════════════════
+
+⏱️ ESTIMATED TIME: 10-15 minutes (first build)
+
+
+═══════════════════════════════════════════════════════════════
+
+🐛 TROUBLESHOOTING
+
+
+If you get "webkit2gtk not found":
+    sudo dnf install webkit2gtk4.1-devel
+
+If you get "libsoup-3.0 not found":
+    sudo dnf install libsoup3-devel
+
+If build still fails:
+    cd src-tauri
+    rm -rf target Cargo.lock ~/.cargo/registry/cache
+    cd ..
+    npm cache clean --force
+    Then run build again
+
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION
+
+Need more details? Check these files:
+    • FEDORA43_BUILD.md (complete guide)
+    • FEDORA43_FIX_README.txt (quick reference)
+    • FEDORA43_STATUS_REPORT.txt (status & details)
+    • CHANGELOG_TAURI2_UPDATE.md (what changed)
+
+
+═══════════════════════════════════════════════════════════════
+
+Done! Your project is now compatible with Fedora 43! 🎉

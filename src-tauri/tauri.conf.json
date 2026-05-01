@@ -1,0 +1,25 @@
+{
+  "productName": "Ranger de Song",
+  "version": "0.1.0",
+  "identifier": "com.ranger.deesong",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run vite", 
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Ranger de Song - DJ Music Organizer",
+        "width": 1200,
+        "height": 800
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all"
+  }
+}
