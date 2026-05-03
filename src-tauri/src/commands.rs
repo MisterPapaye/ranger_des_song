@@ -30,12 +30,15 @@ pub async fn start_organization(
     source: String,
     destination: String,
     window: tauri::Window,
-) -> Result<OrganizationResult, String> {
+) -> Result<OrganizationResult, String> 
+{
+
     let start = Instant::now();
     let source_path = PathBuf::from(source);
     let dest_path = PathBuf::from(destination);
 
-    if !source_path.exists() || !dest_path.exists() {
+    if !source_path.exists() || !dest_path.exists()
+    {
         return Err("Folders do not exist".to_string());
     }
 
@@ -51,7 +54,9 @@ pub async fn start_organization(
     let mut seen_hashes = HashSet::new();
     let client = MusicBrainzClient::new();
 
-    for (idx, audio_file) in audio_files.iter().enumerate() {
+    for (idx, audio_file) in audio_files.iter().enumerate() 
+    {
+
         let file_name = audio_file
             .file_name()
             .and_then(|n| n.to_str())
@@ -79,24 +84,19 @@ pub async fn start_organization(
         }
         seen_hashes.insert(file_hash);
 
-        // --- 2. Extraction & MusicBrainz ---
         match AudioMetadataExtractor::extract(audio_file) {
+
             Ok(metadata) => {
-                let (title, artist, genre) = if !metadata.has_complete_tags || metadata.genre == "Unknown" {
-                    match client.search_recording(&metadata.title, &metadata.artist).await {
-                        Ok(Some((mb_t, mb_a, mb_g))) => {
-                            let final_genre = if mb_g != "Unknown" { mb_g } else { metadata.genre };
-                            (mb_t, mb_a, final_genre)
-                        },
-                        _ => (metadata.title, metadata.artist, metadata.genre),
-                    }
-                } else {
-                    (metadata.title, metadata.artist, metadata.genre)
+                let (title, artist, genre) = match client.search_recording(&metadata.title, &metadata.artist).await {
+                    Ok(Some((mb_t, mb_a, mb_g))) => {
+                        let final_genre = if mb_g != "Unknown" { mb_g } else { metadata.genre };
+                        (mb_t, mb_a, final_genre)
+                    },
+                    _ => (metadata.title, metadata.artist, metadata.genre),
                 };
 
                 let new_filename = AudioFileProcessor::sanitize_filename(&title, &artist, &genre);
 
-                // --- 3. Copie & Vérification existence destination ---
                 match AudioFileProcessor::copy_and_rename(
                     audio_file,
                     &dest_path,
@@ -105,7 +105,6 @@ pub async fn start_organization(
                 ) {
                     Ok(_) => organized_files += 1,
                     Err(e) => {
-                        // Si l'erreur est que le fichier existe déjà, on compte comme doublon
                         if e.to_string().contains("exists") {
                             duplicate_files += 1;
                         } else {
@@ -113,10 +112,14 @@ pub async fn start_organization(
                         }
                     }
                 }
+
             }
             Err(_) => failed_files += 1,
         }
+   
     }
+
+    
 
     Ok(OrganizationResult {
         total_files,
